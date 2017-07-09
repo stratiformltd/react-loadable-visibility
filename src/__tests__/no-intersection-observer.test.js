@@ -7,10 +7,6 @@ const opts = {
   loader: () => Promise.resolve(),
 }
 
-beforeEach(() => {
-  jest.resetAllMocks()
-})
-
 describe('Loadable', () => {
   test('exports', () => {
     expect(typeof LoadableVisibility).toBe('function')

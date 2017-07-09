@@ -1,6 +1,6 @@
 {
   "name": "react-loadable-visibility",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "A wrapper around react-loadable for elements that are visible on the page",
   "main": "lib/index.js",
   "repository": "https://github.com/stratiformltd/react-loadable-visibility",
@@ -12,11 +12,10 @@
   "scripts": {
     "build": "babel src --out-dir lib --ignore __mocks__,__tests__",
     "prepublish": "yarn run build",
-    "test": "jest"
+    "test": "jest --watch"
   },
   "peerDependencies": {
     "react": ">=15.4.0",
-    "react-dom": ">=15.4.0",
     "react-loadable": ">=4.0.0"
   },
   "devDependencies": {

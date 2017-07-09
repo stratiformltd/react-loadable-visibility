@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { findDOMNode } from 'react-dom'
 
 import Loadable from 'react-loadable'
 
@@ -69,10 +68,10 @@ function createLoadableVisibilityComponent (opts, Loadable) {
     }
 
     visibilityHandler = () => {
-      const node = findDOMNode(this)
-
-      intersectionObserver.unobserve(node)
-      delete trackedElements[node]
+      if (this.loadingRef) {
+        intersectionObserver.unobserve(this.loadingRef)
+        delete trackedElements[this.loadingRef]
+      }
 
       this.setState({
         visible: true
