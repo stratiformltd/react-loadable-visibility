@@ -2,11 +2,11 @@ const Loadable = require('react-loadable')
 const React = require('react')
 const { mount } = require('enzyme')
 
-const { IntersectionObserver, makeElementsVisible } = require('../__mocks__/IntersectionObserver')
+const { IntersectionObserver, makeElementsVisible } = require('../../__mocks__/IntersectionObserver')
 
 global.IntersectionObserver = IntersectionObserver
 
-const LoadableVisibility = require('../')
+const LoadableVisibility = require('../../')
 
 const opts = {
   loading: () => null,

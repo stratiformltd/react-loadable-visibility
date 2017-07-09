@@ -1,6 +1,6 @@
 const Loadable = require('react-loadable')
 
-const LoadableVisibility = require('../')
+const LoadableVisibility = require('../../')
 
 const opts = {
   loading: () => null,

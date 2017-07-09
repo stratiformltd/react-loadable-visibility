@@ -1,8 +1,8 @@
 # `react-loadable-visibility`
 
-> A wrapper around [react-loadable](https://github.com/thejameskyle/react-loadable), only loading imports that are visible on the page.
+> A wrapper around [react-loadable](https://github.com/thejameskyle/react-loadable) and [loadable-components](https://github.com/smooth-code/loadable-components), only loading imports that are visible on the page.
 
-## Example
+## Example using `react-loadable`
 
 ```js
 import LoadableVisibility from 'react-loadable-visibility'
@@ -20,13 +20,33 @@ export default class App extends React.Component {
 }
 ```
 
+## Example using `loadable-components`
+
+```js
+import loadableVisiblity from 'react-loadable-visibility/loadable-components'
+import Loading from './my-loading-component'
+
+const LoadableComponent = loadableVisiblity(() => import('./my-component'), {
+  LoadingComponent: Loading,
+})
+
+export default class App extends React.Component {
+  render() {
+    return <LoadableComponent />
+  }
+}
+```
+
 ## Options
 
-The API is exactly the same as `react-loadable`. [Please refer to their documentation on usage.](https://github.com/thejameskyle/react-loadable#guide)
+The API is exactly the same, please refer to plugins documentation:
+
+- [react-loadable documentation](https://github.com/thejameskyle/react-loadable#guide)
+- [loadable-components documentation](https://github.com/smooth-code/loadable-components#getting-started)
 
 # How does this work?
 
-It's in essence a wrapper around `react-loadable` with hooks into an [`IntersectionObserver`](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) to inform us of when a given element is in the viewport. 
+It's in essence a wrapper around `loadable` libraries with hooks into an [`IntersectionObserver`](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) to inform us of when a given element is in the viewport.
 
 Therefore, it will only function in [browsers that have the `IntersectionObserver` API](http://caniuse.com/#feat=intersectionobserver).
 
@@ -34,7 +54,7 @@ Therefore, it will only function in [browsers that have the `IntersectionObserve
 
 If you choose the use the polyfill, you can load it via a [polyfill.io](https://cdn.polyfill.io/v2/docs/) script - `<script src="https://polyfill.io/v2/polyfill.min.js?features=IntersectionObserver"></script>`
 
-Otherwise if the `IntersectionObserver` API is not available, we will revert back to just using `react-loadable` itself.
+Otherwise if the `IntersectionObserver` API is not available, we will revert back to just using `react-loadable` or `loadable-components` itself.
 
 # Why do I want this?
 
