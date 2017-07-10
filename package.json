@@ -1,16 +1,13 @@
 {
   "name": "react-loadable-visibility",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "A wrapper around react-loadable for elements that are visible on the page",
   "main": "lib/index.js",
   "repository": "https://github.com/stratiformltd/react-loadable-visibility",
   "author": "Tasveer Singh",
   "license": "BSD-3-Clause",
-  "files": [
-    "lib/**"
-  ],
   "scripts": {
-    "build": "babel src --out-dir lib --ignore __mocks__,__tests__",
+    "build": "babel src --out-dir . --ignore __mocks__,__tests__",
     "prepublish": "yarn run build",
     "test": "jest"
   },
