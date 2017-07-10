@@ -2,6 +2,8 @@
 
 > A wrapper around [react-loadable](https://github.com/thejameskyle/react-loadable) and [loadable-components](https://github.com/smooth-code/loadable-components), only loading imports that are visible on the page.
 
+[![Build Status](https://travis-ci.org/stratiformltd/react-loadable-visibility.svg?branch=master)](https://travis-ci.org/stratiformltd/react-loadable-visibility)
+
 ## Example using `react-loadable`
 
 ```js
@@ -44,6 +46,8 @@ The API is exactly the same, please refer to plugins documentation:
 - [react-loadable documentation](https://github.com/thejameskyle/react-loadable#guide)
 - [loadable-components documentation](https://github.com/smooth-code/loadable-components#getting-started)
 
+Note that you'll need to have `react-loadable` or `loadable-components` in your `package.json`.
+
 # How does this work?
 
 It's in essence a wrapper around `loadable` libraries with hooks into an [`IntersectionObserver`](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) to inform us of when a given element is in the viewport.
@@ -63,6 +67,13 @@ Otherwise if the `IntersectionObserver` API is not available, we will revert bac
 However it will not account of the content that's currently visible on your page, and only load what's actually visible to the end user. If you have a long page and are loading the entire content of that page for the user, even though they may only be able to see the content [above the fold](https://www.optimizely.com/optimization-glossary/above-the-fold/), it can be wasteful and especially detrimental in a mobile context.
 
 `react-loadable-visibility` is positioned to solve these issues by leveraging the existing awesome API of `loadable` libraries with an extension to only trigger the loading of additional content once that component comes into view.
+
+## Contributors
+
+We'd like to thank the following people for their contributions:
+
+- [Tasveer Singh](https://twitter.com/tazsingh)
+- [Bergé Greg](https://twitter.com/neoziro)
 
 ## License
 
