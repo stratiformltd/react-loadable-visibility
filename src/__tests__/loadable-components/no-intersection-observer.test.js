@@ -11,7 +11,7 @@ describe('loadable', () => {
     expect(typeof LoadableVisibility).toBe('function')
   })
 
-  test('returns loadalbe', () => {
+  test('returns loadable', () => {
     expect(LoadableVisibility(opts)).toBe(loadable(opts))
   })
 })
