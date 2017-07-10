@@ -41,7 +41,7 @@ export default class App extends React.Component {
 
 ## Options
 
-The API is exactly the same, please refer to plugins documentation:
+The API is exactly the same as the original library. Please refer to their documentation:
 
 - [react-loadable documentation](https://github.com/thejameskyle/react-loadable#guide)
 - [loadable-components documentation](https://github.com/smooth-code/loadable-components#getting-started)
