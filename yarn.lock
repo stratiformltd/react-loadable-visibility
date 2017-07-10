@@ -2146,6 +2146,10 @@ load-json-file@^1.0.0:
     pinkie-promise "^2.0.0"
     strip-bom "^2.0.0"
 
+loadable-components@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/loadable-components/-/loadable-components-0.2.0.tgz#b63cafd2202994e9e761ef773b620ef7e3c94111"
+
 locate-path@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/locate-path/-/locate-path-2.0.0.tgz#2b568b265eec944c6d9c0de9c3dbbbca0354cd8e"

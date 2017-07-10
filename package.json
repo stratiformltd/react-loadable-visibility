@@ -12,11 +12,10 @@
   "scripts": {
     "build": "babel src --out-dir lib --ignore __mocks__,__tests__",
     "prepublish": "yarn run build",
-    "test": "jest --watch"
+    "test": "jest"
   },
   "peerDependencies": {
-    "react": ">=15.4.0",
-    "react-loadable": ">=4.0.0"
+    "react": ">=15.4.0"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
@@ -25,6 +24,7 @@
     "babel-preset-stage-2": "^6.24.1",
     "enzyme": "^2.9.1",
     "jest": "^20.0.4",
+    "loadable-components": "^0.2.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-loadable": "^4.0.3",
