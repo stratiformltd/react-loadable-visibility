@@ -2,15 +2,15 @@ import React, { Component } from 'react'
 import { IntersectionObserver } from './capacities'
 
 let intersectionObserver
-let trackedElements = {}
+let trackedElements = new Map()
 
 if (IntersectionObserver) {
   intersectionObserver = new window.IntersectionObserver((entries, observer) => {
     entries.forEach((entry) => {
-      if (entry.intersectionRatio > 0 && trackedElements[entry.target]) {
-        const component = trackedElements[entry.target]
+      const trackedElement = trackedElements.get(entry.target)
 
-        component.visibilityHandler()
+      if (trackedElement && entry.intersectionRatio > 0) {
+        trackedElement.visibilityHandler()
       }
     })
   })
@@ -49,10 +49,15 @@ function createLoadableVisibilityComponent (args, {
     }
 
     attachRef = (element) => {
+      if (this.loadingRef && trackedElements.get(this.loadingRef)) {
+        intersectionObserver.unobserve(this.loadingRef)
+        trackedElements.delete(this.loadingRef)
+      }
+
       this.loadingRef = element
 
       if (element) {
-        trackedElements[element] = this
+        trackedElements.set(element, this)
         intersectionObserver.observe(element)
       }
     }
@@ -60,7 +65,7 @@ function createLoadableVisibilityComponent (args, {
     componentWillUnmount() {
       if (this.loadingRef) {
         intersectionObserver.unobserve(this.loadingRef)
-        delete trackedElements[this.loadingRef]
+        trackedElements.delete(this.loadingRef)
       }
 
       const handlerIndex = visibilityHandlers.indexOf(this.visibilityHandler)
@@ -73,7 +78,7 @@ function createLoadableVisibilityComponent (args, {
     visibilityHandler = () => {
       if (this.loadingRef) {
         intersectionObserver.unobserve(this.loadingRef)
-        delete trackedElements[this.loadingRef]
+        trackedElements.delete(this.loadingRef)
       }
 
       this.setState({
@@ -87,14 +92,14 @@ function createLoadableVisibilityComponent (args, {
       }
 
       if (LoadingComponent) {
-        return <span style={{display: 'inline-block'}} ref={this.attachRef}>
+        return <div style={{display: 'inline-block'}} ref={this.attachRef}>
           {React.createElement(LoadingComponent, {
             isLoading: true,
           })}
-        </span>
+        </div>
       }
 
-      return <span style={{display: 'inline-block'}} ref={this.attachRef} />
+      return <div style={{display: 'inline-block'}} ref={this.attachRef} />
     }
   }
 }
