@@ -92,14 +92,22 @@ function createLoadableVisibilityComponent (args, {
       }
 
       if (LoadingComponent) {
-        return <div style={{display: 'inline-block'}} ref={this.attachRef}>
+        return <div
+          style={{display: 'inline-block'}}
+          className={this.props.className}
+          ref={this.attachRef}
+        >
           {React.createElement(LoadingComponent, {
             isLoading: true,
           })}
         </div>
       }
 
-      return <div style={{display: 'inline-block'}} ref={this.attachRef} />
+      return <div
+        style={{display: 'inline-block'}}
+        className={this.props.className}
+        ref={this.attachRef}
+      />
     }
   }
 }

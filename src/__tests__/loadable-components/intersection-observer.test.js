@@ -45,4 +45,12 @@ describe('Loadable', () => {
 
     expect(loadable().load).toHaveBeenCalled()
   })
+
+  test('passes the className prop', () => {
+    const Loader = loadableVisiblity(opts)
+
+    const wrapper = mount(<Loader className='my-class-name' />)
+
+    expect(wrapper.find('.my-class-name')).toHaveLength(1)
+  })
 })
