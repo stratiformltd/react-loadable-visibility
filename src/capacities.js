@@ -1,1 +1,1 @@
-export const IntersectionObserver = window && window.IntersectionObserver
+export const IntersectionObserver = typeof window !== 'undefined' && window.IntersectionObserver
