@@ -93,7 +93,7 @@ function createLoadableVisibilityComponent (args, {
 
       if (LoadingComponent) {
         return <div
-          style={{display: 'inline-block'}}
+          style={{display: 'inline-block', minHeight: '1px', minWidth: '1px'}}
           className={this.props.className}
           ref={this.attachRef}
         >
@@ -104,7 +104,7 @@ function createLoadableVisibilityComponent (args, {
       }
 
       return <div
-        style={{display: 'inline-block'}}
+        style={{display: 'inline-block', minHeight: '1px', minWidth: '1px'}}
         className={this.props.className}
         ref={this.attachRef}
       />
