@@ -64,7 +64,7 @@ Otherwise if the `IntersectionObserver` API is not available, we will revert bac
 
 `react-loadable` and `loadable-components` are fantastic higher level components to load additional modules once they are mounted on your page. It's great for keeping your bundle size small and pulling in a larger payload when the required components are part of your tree.
 
-However it will not account of the content that's currently visible on your page, and only load what's actually visible to the end user. If you have a long page and are loading the entire content of that page for the user, even though they may only be able to see the content [above the fold](https://www.optimizely.com/optimization-glossary/above-the-fold/), it can be wasteful and especially detrimental in a mobile context.
+However it will not account for the content that's currently visible on your page, and only load what's actually visible to the end user. If you have a long page and are loading the entire content of that page for the user, even though they may only be able to see the content [above the fold](https://www.optimizely.com/optimization-glossary/above-the-fold/), it can be wasteful and especially detrimental in a mobile context.
 
 `react-loadable-visibility` is positioned to solve these issues by leveraging the existing awesome API of `loadable` libraries with an extension to only trigger the loading of additional content once that component comes into view.
 
