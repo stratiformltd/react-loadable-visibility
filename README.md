@@ -25,10 +25,10 @@ export default class App extends React.Component {
 ## Example using `loadable-components`
 
 ```js
-import loadableVisiblity from 'react-loadable-visibility/loadable-components'
+import loadableVisibility from 'react-loadable-visibility/loadable-components'
 import Loading from './my-loading-component'
 
-const LoadableComponent = loadableVisiblity(() => import('./my-component'), {
+const LoadableComponent = loadableVisibility(() => import('./my-component'), {
   LoadingComponent: Loading,
 })
 
