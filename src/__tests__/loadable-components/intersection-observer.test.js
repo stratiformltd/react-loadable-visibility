@@ -7,6 +7,7 @@ const { IntersectionObserver, makeElementsVisible } = require('../../__mocks__/I
 global.IntersectionObserver = IntersectionObserver
 
 const loadableVisiblity = require('../../loadable-components')
+const trackedElements = require('../../tracked_elements').default
 
 const opts = {
   loading: () => null,
@@ -17,6 +18,7 @@ const props = {'a': 1, 'b': 2}
 
 beforeEach(() => {
   jest.resetAllMocks()
+  trackedElements.clear()
 })
 
 describe('Loadable', () => {
@@ -40,6 +42,18 @@ describe('Loadable', () => {
     expect(loadable.loadableReturn).toHaveBeenCalledWith(props)
   })
 
+  test('it clears out tracked elements when they become visible', () => {
+    const Loader = loadableVisiblity(opts)
+
+    const wrapper = mount(<Loader {...props} />)
+
+    expect(trackedElements.size).toEqual(1)
+
+    makeElementsVisible()
+
+    expect(trackedElements.size).toEqual(0)
+  })
+
   test('preload calls loadable load', () => {
     loadableVisiblity(opts).load()
 
@@ -52,5 +66,15 @@ describe('Loadable', () => {
     const wrapper = mount(<Loader className='my-class-name' />)
 
     expect(wrapper.find('.my-class-name')).toHaveLength(1)
+  })
+
+  test('it does not set up visibility handlers until mounted', () => {
+    const Loader = loadableVisiblity(opts)
+
+    expect(trackedElements.size).toEqual(0)
+
+    const wrapper = mount(<Loader className='my-class-name' />)
+
+    expect(trackedElements.size).toEqual(1)
   })
 })

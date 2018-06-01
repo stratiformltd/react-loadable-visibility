@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
+import * as React from 'react'
 import { IntersectionObserver } from './capacities'
+import trackedElements from './tracked_elements'
 
 let intersectionObserver
-let trackedElements = new Map()
 
 if (IntersectionObserver) {
   intersectionObserver = new window.IntersectionObserver((entries, observer) => {
@@ -22,63 +22,45 @@ function createLoadableVisibilityComponent (args, {
   LoadingComponent,
 }) {
   let preloaded = false
-  const visibilityHandlers = []
 
   const LoadableComponent = Loadable(...args)
 
-  return class LoadableVisibilityComponent extends Component {
+  return class LoadableVisibilityComponent extends React.Component {
     static [preloadFunc]() {
-      if (!preloaded) {
-        preloaded = true
-        visibilityHandlers.forEach((handler) => handler())
-      }
-
+      preloaded = true
       LoadableComponent[preloadFunc]()
     }
 
     constructor(props) {
       super(props)
-
-      if (!preloaded) {
-        visibilityHandlers.push(this.visibilityHandler)
-      }
-
       this.state = {
         visible: preloaded,
       }
     }
 
-    attachRef = (element) => {
-      if (this.loadingRef && trackedElements.get(this.loadingRef)) {
-        intersectionObserver.unobserve(this.loadingRef)
-        trackedElements.delete(this.loadingRef)
-      }
-
-      this.loadingRef = element
-
-      if (element) {
+    componentDidMount() {
+      if (!preloaded) {
+        const element = this.refs.loading
         trackedElements.set(element, this)
         intersectionObserver.observe(element)
       }
     }
 
     componentWillUnmount() {
-      if (this.loadingRef) {
-        intersectionObserver.unobserve(this.loadingRef)
-        trackedElements.delete(this.loadingRef)
-      }
+      const element = this.refs.loading
 
-      const handlerIndex = visibilityHandlers.indexOf(this.visibilityHandler)
-
-      if (handlerIndex >= 0) {
-        visibilityHandlers.splice(handlerIndex, 1)
+      if (element) {
+        intersectionObserver.unobserve(element)
+        trackedElements.delete(element)
       }
     }
 
     visibilityHandler = () => {
-      if (this.loadingRef) {
-        intersectionObserver.unobserve(this.loadingRef)
-        trackedElements.delete(this.loadingRef)
+      const element = this.refs.loading
+
+      if (element) {
+        intersectionObserver.unobserve(element)
+        trackedElements.delete(element)
       }
 
       this.setState({
@@ -95,7 +77,7 @@ function createLoadableVisibilityComponent (args, {
         return <div
           style={{display: 'inline-block', minHeight: '1px', minWidth: '1px'}}
           className={this.props.className}
-          ref={this.attachRef}
+          ref="loading"
         >
           {React.createElement(LoadingComponent, {
             isLoading: true,
@@ -106,7 +88,7 @@ function createLoadableVisibilityComponent (args, {
       return <div
         style={{display: 'inline-block', minHeight: '1px', minWidth: '1px'}}
         className={this.props.className}
-        ref={this.attachRef}
+        ref="loading"
       />
     }
   }
