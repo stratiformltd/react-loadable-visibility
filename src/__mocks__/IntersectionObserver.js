@@ -1,4 +1,7 @@
 const intersectionObservers = []
+const trackedElements = []
+
+module.exports.trackedElements = trackedElements
 
 module.exports.makeElementsVisible = function makeElementsVisible () {
   intersectionObservers.forEach((observer) => {
@@ -17,7 +20,7 @@ module.exports.IntersectionObserver = class IntersectionObserver {
   constructor(callback) {
     this.callback = callback
 
-    this.trackedElements = []
+    this.trackedElements = trackedElements
 
     intersectionObservers.push(this)
   }

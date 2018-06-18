@@ -2,12 +2,15 @@ const loadable = require('loadable-components')
 const React = require('react')
 const { mount } = require('enzyme')
 
-const { IntersectionObserver, makeElementsVisible } = require('../../__mocks__/IntersectionObserver')
+const {
+  IntersectionObserver,
+  makeElementsVisible,
+  trackedElements
+} = require('../../__mocks__/IntersectionObserver')
 
 global.IntersectionObserver = IntersectionObserver
 
 const loadableVisiblity = require('../../loadable-components')
-const trackedElements = require('../../tracked_elements').default
 
 const opts = {
   loading: () => null,
@@ -18,7 +21,7 @@ const props = {'a': 1, 'b': 2}
 
 beforeEach(() => {
   jest.resetAllMocks()
-  trackedElements.clear()
+  trackedElements.length = 0
 })
 
 describe('Loadable', () => {
@@ -47,11 +50,11 @@ describe('Loadable', () => {
 
     const wrapper = mount(<Loader {...props} />)
 
-    expect(trackedElements.size).toEqual(1)
+    expect(trackedElements.length).toEqual(1)
 
     makeElementsVisible()
 
-    expect(trackedElements.size).toEqual(0)
+    expect(trackedElements.length).toEqual(0)
   })
 
   test('preload calls loadable load', () => {
@@ -59,6 +62,30 @@ describe('Loadable', () => {
 
     expect(loadable().load).toHaveBeenCalled()
   })
+
+  test('preload will cause the loadable component do be displayed', () => {
+    const Loader = loadableVisiblity(opts)
+
+    const wrapper = mount(<Loader {...props} />)
+    expect(wrapper.find('loadableObject')).toHaveLength(0)
+
+    Loader.load();
+
+    expect(wrapper.find('loadableObject')).toHaveLength(1)
+  });
+
+  test('it displays the loadable component when it becomes visible', () => {
+    const Loader = loadableVisiblity(opts)
+
+    const wrapper = mount(<Loader {...props} className="loading-class-name" />)
+    expect(wrapper.find('.loading-class-name')).toHaveLength(1)
+    expect(wrapper.find('loadableObject')).toHaveLength(0)
+
+    makeElementsVisible()
+
+    expect(wrapper.find('.loading-class-name')).toHaveLength(0)
+    expect(wrapper.find('loadableObject')).toHaveLength(1)
+  });
 
   test('passes the className prop', () => {
     const Loader = loadableVisiblity(opts)
@@ -71,10 +98,10 @@ describe('Loadable', () => {
   test('it does not set up visibility handlers until mounted', () => {
     const Loader = loadableVisiblity(opts)
 
-    expect(trackedElements.size).toEqual(0)
+    expect(trackedElements.length).toEqual(0)
 
     const wrapper = mount(<Loader className='my-class-name' />)
 
-    expect(trackedElements.size).toEqual(1)
+    expect(trackedElements.length).toEqual(1)
   })
 })
