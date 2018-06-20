@@ -53,6 +53,30 @@ describe('Loadable', () => {
 
     expect(wrapper.find('.my-class-name')).toHaveLength(1)
   })
+
+  test('preload will cause the loadable component to be displayed', () => {
+    const Loader = LoadableVisibility(opts)
+
+    const wrapper = mount(<Loader {...props} />)
+    expect(wrapper.find('LoadableObject')).toHaveLength(0)
+
+    Loader.preload();
+
+    expect(wrapper.find('LoadableObject')).toHaveLength(1)
+  });
+
+  test('it displays the loadable component when it becomes visible', () => {
+    const Loader = LoadableVisibility(opts)
+
+    const wrapper = mount(<Loader {...props} className="loading-class-name" />)
+    expect(wrapper.find('.loading-class-name')).toHaveLength(1)
+    expect(wrapper.find('LoadableObject')).toHaveLength(0)
+
+    makeElementsVisible()
+
+    expect(wrapper.find('.loading-class-name')).toHaveLength(0)
+    expect(wrapper.find('LoadableObject')).toHaveLength(1)
+  });
 })
 
 describe('Loadable.Map', () => {

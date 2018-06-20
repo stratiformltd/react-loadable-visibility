@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { IntersectionObserver } from './capacities'
 
 let intersectionObserver
-let trackedElements = new Map()
+const trackedElements = new Map()
 
 if (IntersectionObserver) {
   intersectionObserver = new window.IntersectionObserver((entries, observer) => {
@@ -48,24 +48,20 @@ function createLoadableVisibilityComponent (args, {
       }
     }
 
-    attachRef = (element) => {
-      if (this.loadingRef && trackedElements.get(this.loadingRef)) {
-        intersectionObserver.unobserve(this.loadingRef)
-        trackedElements.delete(this.loadingRef)
-      }
-
-      this.loadingRef = element
-
-      if (element) {
+    componentDidMount() {
+      if (!preloaded) {
+        const element = this.loadingRef
         trackedElements.set(element, this)
         intersectionObserver.observe(element)
       }
     }
 
     componentWillUnmount() {
-      if (this.loadingRef) {
-        intersectionObserver.unobserve(this.loadingRef)
-        trackedElements.delete(this.loadingRef)
+      const element = this.loadingRef
+
+      if (element) {
+        intersectionObserver.unobserve(element)
+        trackedElements.delete(element)
       }
 
       const handlerIndex = visibilityHandlers.indexOf(this.visibilityHandler)
@@ -75,10 +71,16 @@ function createLoadableVisibilityComponent (args, {
       }
     }
 
+    attachRef = (element) => {
+      this.loadingRef = element
+    }
+
     visibilityHandler = () => {
-      if (this.loadingRef) {
-        intersectionObserver.unobserve(this.loadingRef)
-        trackedElements.delete(this.loadingRef)
+      const element = this.loadingRef
+
+      if (element) {
+        intersectionObserver.unobserve(element)
+        trackedElements.delete(element)
       }
 
       this.setState({

@@ -1,4 +1,7 @@
 const intersectionObservers = []
+const globallyTrackedElements = []
+
+module.exports.globallyTrackedElements = globallyTrackedElements
 
 module.exports.makeElementsVisible = function makeElementsVisible () {
   intersectionObservers.forEach((observer) => {
@@ -24,6 +27,7 @@ module.exports.IntersectionObserver = class IntersectionObserver {
 
   observe(element) {
     this.trackedElements.push(element)
+    globallyTrackedElements.push(element)
   }
 
   unobserve(element) {
@@ -31,6 +35,12 @@ module.exports.IntersectionObserver = class IntersectionObserver {
 
     if (elementIndex >= 0) {
       this.trackedElements.splice(elementIndex, 1)
+    }
+
+    const globalIndex = globallyTrackedElements.indexOf(element)
+
+    if (globalIndex>= 0) {
+      globallyTrackedElements.splice(elementIndex, 1)
     }
   }
 }
