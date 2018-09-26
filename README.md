@@ -79,4 +79,4 @@ We'd like to thank the following people for their contributions:
 
 `react-loadable-visibility` may be redistributed according to the [BSD 3-Clause License](LICENSE).
 
-Copyright 2017, Stratiform Limited.
+Copyright 2018, Stratiform Limited.
