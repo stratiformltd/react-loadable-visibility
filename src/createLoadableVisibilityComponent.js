@@ -4,16 +4,18 @@ import { IntersectionObserver } from './capacities'
 let intersectionObserver
 const trackedElements = new Map()
 
-if (IntersectionObserver) {
-  intersectionObserver = new window.IntersectionObserver((entries, observer) => {
-    entries.forEach((entry) => {
-      const trackedElement = trackedElements.get(entry.target)
+const setIntersectionObserver = (options = {}) => {
+  if (IntersectionObserver) {
+    intersectionObserver = new window.IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        const trackedElement = trackedElements.get(entry.target)
 
-      if (trackedElement && entry.intersectionRatio > 0) {
-        trackedElement.visibilityHandler()
-      }
-    })
-  })
+        if (trackedElement && entry.intersectionRatio > 0) {
+          trackedElement.visibilityHandler()
+        }
+      })
+    }, options)
+  }
 }
 
 function createLoadableVisibilityComponent (args, {
@@ -52,6 +54,7 @@ function createLoadableVisibilityComponent (args, {
       if (!preloaded) {
         const element = this.loadingRef
         trackedElements.set(element, this)
+        setIntersectionObserver(args[0].observerOptions)
         intersectionObserver.observe(element)
       }
     }
