@@ -20,7 +20,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "enzyme": "^2.9.1",
-    "jest": "^20.0.4",
+    "jest": "^23.6.0",
     "loadable-components": "^0.2.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
