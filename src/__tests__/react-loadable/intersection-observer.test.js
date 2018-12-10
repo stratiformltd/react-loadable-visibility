@@ -11,6 +11,7 @@ const LoadableVisibility = require('../../')
 const opts = {
   loading: () => null,
   loader: () => Promise.resolve(),
+  observerOptions: { 'a': 'test' }
 }
 
 const props = {'a': 1, 'b': 2}
@@ -76,6 +77,23 @@ describe('Loadable', () => {
 
     expect(wrapper.find('.loading-class-name')).toHaveLength(0)
     expect(wrapper.find('LoadableObject')).toHaveLength(1)
+  });
+
+  test('it should call setIntersectionObserver with observerOptions', () => {
+    const mock = jest.fn().mockImplementation(() => {
+      return {
+        observe: () => {},
+      }
+    })
+
+    global.IntersectionObserver = mock
+
+    const Loader = LoadableVisibility(opts)
+
+    mount(<Loader {...props} />)
+
+    expect(mock).toHaveBeenCalledWith(expect.anything(), opts.observerOptions)
+    global.IntersectionObserver = IntersectionObserver
   });
 })
 
