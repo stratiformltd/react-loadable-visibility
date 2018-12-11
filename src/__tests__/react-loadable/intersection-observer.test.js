@@ -35,8 +35,18 @@ describe('Loadable', () => {
 
     expect(Loadable.LoadableReturn).not.toHaveBeenCalled()
 
-    makeElementsVisible()
+    makeElementsVisible('byRatio')
+    expect(Loadable.LoadableReturn).toHaveBeenCalledWith(props)
+  })
 
+  test('calls "loadable" when intersectionRatio equals 0 but isIntersecting is true', () => {
+    const Loader = LoadableVisibility(opts)
+
+    const wrapper = mount(<Loader {...props} />)
+
+    expect(Loadable.LoadableReturn).not.toHaveBeenCalled()
+
+    makeElementsVisible('byIntersecting')
     expect(Loadable.LoadableReturn).toHaveBeenCalledWith(props)
   })
 

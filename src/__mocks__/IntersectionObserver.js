@@ -1,13 +1,27 @@
 const intersectionObservers = []
 const globallyTrackedElements = []
+const elementVisibilityStates = {
+  byIntersecting: {
+    isIntersecting: true,
+    intersectionRatio: 0,
+  },
+  byRatio: {
+    isIntersecting: undefined,
+    intersectionRatio: 0.1,
+  }
+}
 
 module.exports.globallyTrackedElements = globallyTrackedElements
 
-module.exports.makeElementsVisible = function makeElementsVisible () {
+/**
+ * @param {'byIntersecting' | 'byRatio'} mode
+ */
+module.exports.makeElementsVisible = function makeElementsVisible (mode = 'byRatio') {
+  const intersectionObject = elementVisibilityStates[mode];
   intersectionObservers.forEach((observer) => {
     const entries = observer.trackedElements.map((element) => {
       return {
-        intersectionRatio: 1,
+        ...intersectionObject,
         target: element,
       }
     })
@@ -39,7 +53,7 @@ module.exports.IntersectionObserver = class IntersectionObserver {
 
     const globalIndex = globallyTrackedElements.indexOf(element)
 
-    if (globalIndex>= 0) {
+    if (globalIndex >= 0) {
       globallyTrackedElements.splice(elementIndex, 1)
     }
   }

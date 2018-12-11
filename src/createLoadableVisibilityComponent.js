@@ -9,7 +9,10 @@ if (IntersectionObserver) {
     entries.forEach((entry) => {
       const trackedElement = trackedElements.get(entry.target)
 
-      if (trackedElement && entry.intersectionRatio > 0) {
+      if (
+        trackedElement &&
+        (entry.isIntersecting || entry.intersectionRatio > 0)
+      ) {
         trackedElement.visibilityHandler()
       }
     })
