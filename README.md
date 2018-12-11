@@ -75,6 +75,8 @@ We'd like to thank the following people for their contributions:
 - [Tasveer Singh](https://twitter.com/tazsingh)
 - [Bergé Greg](https://twitter.com/neoziro)
 
+Have a look at the [GitHub contributors page](https://github.com/stratiformltd/react-loadable-visibility/graphs/contributors) for a full list of all contributors.
+
 ## License
 
 `react-loadable-visibility` may be redistributed according to the [BSD 3-Clause License](LICENSE).
