@@ -1,3 +1,5 @@
+const React = require("react");
+
 const loadableReturn = jest.fn();
 
 const loadableObject = props => {
@@ -5,7 +7,7 @@ const loadableObject = props => {
   return null;
 };
 
-loadableObject.load = jest.fn();
+loadableObject.preload = jest.fn();
 
 function loadable(opts) {
   return loadableObject;
@@ -13,4 +15,4 @@ function loadable(opts) {
 
 loadable.loadableReturn = loadableReturn;
 
-module.exports = loadable;
+module.exports = jest.fn(loadable);

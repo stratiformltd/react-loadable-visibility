@@ -1,117 +1,158 @@
-const loadable = require('loadable-components')
-const React = require('react')
-const { mount } = require('enzyme')
+jest.dontMock("@loadable/component");
+
+const loadable = require("@loadable/component");
+const React = require("react");
+
+const {
+  act,
+  cleanup,
+  render,
+  waitForElement
+} = require("@testing-library/react");
 
 const {
   IntersectionObserver,
   makeElementsVisible,
   globallyTrackedElements
-} = require('../../__mocks__/IntersectionObserver')
+} = require("../../__mocks__/IntersectionObserver");
 
-global.IntersectionObserver = IntersectionObserver
+global.IntersectionObserver = IntersectionObserver;
 
-const loadableVisiblity = require('../../loadable-components')
+const loadableVisiblity = require("../../loadable-components");
+
+const loadedComponent = jest.fn(() => <div data-testid="loaded-component" />);
+
+const loader = () => Promise.resolve(loadedComponent);
 
 const opts = {
-  loading: () => null,
-  loader: () => Promise.resolve(),
-}
+  fallback: () => <div data-testid="fallback" />
+};
 
-const props = {'a': 1, 'b': 2}
+const args = [loader, opts];
+
+const props = { a: 1, b: 2 };
 
 beforeEach(() => {
-  jest.resetAllMocks()
-  globallyTrackedElements.length = 0
-})
+  jest.clearAllMocks();
+  jest.resetModules();
+  globallyTrackedElements.length = 0;
+  cleanup();
+});
 
-describe('Loadable', () => {
-  test('exports', () => {
-    expect(typeof loadableVisiblity).toBe('function')
-  })
-
-  test('doesnt return loadable', () => {
-    expect(loadableVisiblity(opts)).not.toBe(loadable(opts))
-  })
-
-  test('calls "loadable" when elements are visible', () => {
-    const Loader = loadableVisiblity(opts)
-
-    const wrapper = mount(<Loader {...props} />)
-
-    expect(loadable.loadableReturn).not.toHaveBeenCalled()
-
-    makeElementsVisible('byRatio')
-    expect(loadable.loadableReturn).toHaveBeenCalledWith(props)
-  })
-
-  test('calls "loadable" when intersectionRatio equals 0 but isIntersecting is true', () => {
-    const Loader = loadableVisiblity(opts)
-
-    const wrapper = mount(<Loader {...props} />)
-
-    expect(loadable.loadableReturn).not.toHaveBeenCalled()
-
-    makeElementsVisible('byIntersecting')
-    expect(loadable.loadableReturn).toHaveBeenCalledWith(props)
-  })
-
-  test('it clears out tracked elements when they become visible', () => {
-    const Loader = loadableVisiblity(opts)
-
-    const wrapper = mount(<Loader {...props} />)
-
-    expect(globallyTrackedElements.length).toEqual(1)
-
-    makeElementsVisible()
-
-    expect(globallyTrackedElements.length).toEqual(0)
-  })
-
-  test('preload calls loadable load', () => {
-    loadableVisiblity(opts).load()
-
-    expect(loadable().load).toHaveBeenCalled()
-  })
-
-  test('preload will cause the loadable component to be displayed', () => {
-    const Loader = loadableVisiblity(opts)
-
-    const wrapper = mount(<Loader {...props} />)
-    expect(wrapper.find('loadableObject')).toHaveLength(0)
-
-    Loader.load();
-
-    expect(wrapper.find('loadableObject')).toHaveLength(1)
+describe("Loadable", () => {
+  test("exports", () => {
+    expect(typeof loadableVisiblity).toBe("function");
   });
 
-  test('it displays the loadable component when it becomes visible', () => {
-    const Loader = loadableVisiblity(opts)
+  test("doesnt return loadable", () => {
+    // Mock @loadable/component to get a stable `preload` function
+    jest.doMock("@loadable/component");
 
-    const wrapper = mount(<Loader {...props} className="loading-class-name" />)
-    expect(wrapper.find('.loading-class-name')).toHaveLength(1)
-    expect(wrapper.find('loadableObject')).toHaveLength(0)
+    const loadable = require("@loadable/component");
+    const loadableVisiblity = require("../../loadable-components"); // Require our tested module with the above mock applied
 
-    makeElementsVisible()
+    const Loader = loadableVisiblity(loader, opts);
 
-    expect(wrapper.find('.loading-class-name')).toHaveLength(0)
-    expect(wrapper.find('loadableObject')).toHaveLength(1)
+    expect(loadable).toHaveBeenCalledWith(loader, opts);
+    expect(Loader).not.toBe(loadable(loader, opts));
   });
 
-  test('passes the className prop', () => {
-    const Loader = loadableVisiblity(opts)
+  test('calls "loadable" when elements are visible', async () => {
+    const Loader = loadableVisiblity(loader);
 
-    const wrapper = mount(<Loader className='my-class-name' />)
+    const { queryByTestId } = render(<Loader {...props} />);
 
-    expect(wrapper.find('.my-class-name')).toHaveLength(1)
-  })
+    expect(loadedComponent).not.toHaveBeenCalled();
 
-  test('it does not set up visibility handlers until mounted', () => {
-    const Loader = loadableVisiblity(opts)
+    act(() => makeElementsVisible("byRatio"));
 
-    expect(globallyTrackedElements.length).toEqual(0)
+    await waitForElement(() => queryByTestId("loaded-component"));
 
-    const wrapper = mount(<Loader className='my-class-name' />)
+    expect(loadedComponent).toHaveBeenCalledWith(props, expect.anything());
+  });
 
-    expect(globallyTrackedElements.length).toEqual(1)
-  })
-})
+  test('calls "loadable" when intersectionRatio equals 0 but isIntersecting is true', async () => {
+    const Loader = loadableVisiblity(loader);
+
+    const { queryByTestId } = render(<Loader {...props} />);
+
+    expect(loadedComponent).not.toHaveBeenCalled();
+
+    act(() => makeElementsVisible("byIntersecting"));
+
+    await waitForElement(() => queryByTestId("loaded-component"));
+
+    expect(loadedComponent).toHaveBeenCalledWith(props, expect.anything());
+  });
+
+  test("it clears out tracked elements when they become visible", () => {
+    const Loader = loadableVisiblity(loader);
+
+    render(<Loader {...props} />);
+
+    expect(globallyTrackedElements.length).toEqual(1);
+
+    act(() => {
+      makeElementsVisible();
+    });
+
+    expect(globallyTrackedElements.length).toEqual(0);
+  });
+
+  test("preload calls loadable load", () => {
+    // Mock @loadable/component to get a stable `preload` function
+    jest.doMock("@loadable/component");
+
+    const loadable = require("@loadable/component");
+    const loadableVisiblity = require("../../loadable-components"); // Require our tested module with the above mock applied
+
+    loadableVisiblity(loader).preload();
+
+    expect(loadable().preload).toHaveBeenCalled();
+  });
+
+  test("preload will cause the loadable component to be displayed", async () => {
+    const Loader = loadableVisiblity(loader);
+
+    const { queryByTestId } = render(<Loader {...props} />);
+    expect(queryByTestId("loaded-component")).toBeNull();
+
+    act(() => {
+      Loader.preload();
+    });
+
+    await waitForElement(() => queryByTestId("loaded-component"));
+
+    expect(queryByTestId("loaded-component")).toBeTruthy();
+  });
+
+  test("it displays the loadable component when it becomes visible", async () => {
+    const Loader = loadableVisiblity(loader);
+
+    const { queryByTestId } = render(
+      <Loader {...props} data-testid="loader" className="loader-class-name" />
+    );
+
+    expect(queryByTestId("loader").className).toBe("loader-class-name");
+    expect(queryByTestId("loaded-component")).toBeNull();
+
+    act(() => {
+      makeElementsVisible();
+    });
+
+    await waitForElement(() => queryByTestId("loaded-component"));
+
+    expect(queryByTestId("loader")).toBeNull();
+    expect(queryByTestId("loaded-component")).toBeTruthy();
+  });
+
+  test("it does not set up visibility handlers until mounted", () => {
+    const Loader = loadableVisiblity(loader);
+
+    expect(globallyTrackedElements.length).toEqual(0);
+
+    render(<Loader className="my-class-name" />);
+
+    expect(globallyTrackedElements.length).toEqual(1);
+  });
+});
