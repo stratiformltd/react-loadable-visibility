@@ -1,1 +1,1 @@
-module.exports = require('./react-loadable')
+module.exports = require("./loadable-components");

@@ -1,9 +1,0 @@
-{
-  "presets": [
-    ["env", {
-      "loose": true
-    }],
-    "react",
-    "stage-2"
-  ]
-}
