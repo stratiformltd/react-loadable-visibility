@@ -27,7 +27,7 @@ import loadableVisibility from "react-loadable-visibility/loadable-components";
 import Loading from "./my-loading-component";
 
 const LoadableComponent = loadableVisibility(() => import("./my-component"), {
-  fallback: Loading
+  fallback: <Loading />
 });
 
 export default function App() {
