@@ -44,11 +44,13 @@ function createLoadableVisibilityComponent(
     }
 
     useEffect(() => {
-      if (!isVisible && visibilityElementRef.current) {
+      const element = visibilityElementRef.current;
+
+      if (!isVisible && element) {
         visibilityHandlers.push(visibilityHandler);
 
-        trackedElements.set(visibilityElementRef.current, visibilityHandler);
-        intersectionObserver.observe(visibilityElementRef.current);
+        trackedElements.set(element, visibilityHandler);
+        intersectionObserver.observe(element);
 
         return () => {
           const handlerIndex = visibilityHandlers.indexOf(visibilityHandler);
@@ -57,8 +59,8 @@ function createLoadableVisibilityComponent(
             visibilityHandlers.splice(handlerIndex, 1);
           }
 
-          intersectionObserver.unobserve(visibilityElementRef.current);
-          trackedElements.delete(visibilityElementRef.current);
+          intersectionObserver.unobserve(element);
+          trackedElements.delete(element);
         };
       }
     }, [isVisible, visibilityElementRef.current]);
@@ -67,7 +69,7 @@ function createLoadableVisibilityComponent(
       return <LoadableComponent {...props} />;
     }
 
-    if (LoadingComponent) {
+    if (LoadingComponent || props.fallback) {
       return (
         <div
           style={{
@@ -78,9 +80,12 @@ function createLoadableVisibilityComponent(
           {...props}
           ref={visibilityElementRef}
         >
-          {React.createElement(LoadingComponent, {
-            isLoading: true
-          })}
+          {LoadingComponent
+            ? React.createElement(LoadingComponent, {
+                isLoading: true,
+                ...props
+              })
+            : props.fallback}
         </div>
       );
     }

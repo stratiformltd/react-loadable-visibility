@@ -8,7 +8,7 @@ function loadableVisiblity(load, opts = {}) {
     return createLoadableVisibilityComponent([load, opts], {
       Loadable: loadable,
       preloadFunc: "preload",
-      loadingComponent: () => opts.LoadingComponent
+      LoadingComponent: opts.fallback ? () => opts.fallback : null
     });
   } else {
     return loadable(load, opts);
