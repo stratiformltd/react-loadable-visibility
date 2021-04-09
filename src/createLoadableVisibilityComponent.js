@@ -77,7 +77,6 @@ function createLoadableVisibilityComponent(
             minHeight: "1px",
             minWidth: "1px"
           }}
-          {...props}
           ref={visibilityElementRef}
         >
           {LoadingComponent
@@ -93,7 +92,6 @@ function createLoadableVisibilityComponent(
     return (
       <div
         style={{ display: "inline-block", minHeight: "1px", minWidth: "1px" }}
-        {...props}
         ref={visibilityElementRef}
       />
     );
