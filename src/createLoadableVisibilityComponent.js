@@ -23,9 +23,9 @@ if (IntersectionObserver) {
 
 function createLoadableVisibilityComponent(
   args,
-  { Loadable, preloadFunc, LoadingComponent }
+  { Loadable, preloadFunc, loadFunc, LoadingComponent }
 ) {
-  let preloaded = false;
+  let preloaded = false, loaded = false;
   const visibilityHandlers = [];
 
   const LoadableComponent = Loadable(...args);
@@ -106,6 +106,14 @@ function createLoadableVisibilityComponent(
     }
 
     return LoadableComponent[preloadFunc]();
+  };
+
+  LoadableVisibilityComponent[loadFunc] = () => {
+    if (!loaded) {
+      loaded = true;
+      visibilityHandlers.forEach(handler => handler());
+    }
+    return LoadableComponent[loadFunc]();
   };
 
   return LoadableVisibilityComponent;
