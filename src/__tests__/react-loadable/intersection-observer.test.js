@@ -99,18 +99,19 @@ describe("Loadable", () => {
 
   test("preload will cause the loadable component to be displayed", async () => {
     const Loader = LoadableVisibility(opts);
+    let returnedValue;
 
     const { queryByTestId } = render(<Loader {...props} />);
 
     expect(queryByTestId("loaded-component")).toBeNull();
 
     act(() => {
-      Loader.preload();
+      returnedValue = Loader.preload()
+      expect(returnedValue).toBeInstanceOf(Promise);
     });
-
-    await waitForElement(() => queryByTestId("loaded-component"));
-
-    expect(queryByTestId("loaded-component")).toBeTruthy();
+    returnedValue.then(() => {
+      expect(queryByTestId("loaded-component")).toBeTruthy();
+    })
   });
 
   test("it displays the loadable component when it becomes visible", async () => {
@@ -210,4 +211,4 @@ describe("Loadable.Map", () => {
 
     expect(Loadable.Map().preload).toHaveBeenCalled();
   });
-});
+})

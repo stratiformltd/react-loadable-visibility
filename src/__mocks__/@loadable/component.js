@@ -8,6 +8,7 @@ const loadableObject = props => {
 };
 
 loadableObject.preload = jest.fn();
+loadableObject.load = jest.fn();
 
 function loadable(opts) {
   return loadableObject;
