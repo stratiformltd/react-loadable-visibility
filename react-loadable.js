@@ -20,7 +20,7 @@ function LoadableVisibility(opts) {
       Loadable: _reactLoadable["default"],
       preloadFunc: 'preload',
 
-      /* Preload works same as load function present in loadable/component */
+      /* Preload helps in synchronously loading a component and returns a promise */
       loadFunc: 'preload',
       LoadingComponent: opts.loading
     });
@@ -34,8 +34,6 @@ function LoadableVisibilityMap(opts) {
     return (0, _createLoadableVisibilityComponent["default"])([opts], {
       Loadable: _reactLoadable["default"].Map,
       preloadFunc: 'preload',
-
-      /* Preload works same as load function present in loadable/component */
       loadFunc: 'preload',
       LoadingComponent: opts.loading
     });

@@ -75,11 +75,11 @@ function createLoadableVisibilityComponent(args, _ref) {
     }, [isVisible, visibilityElementRef.current]);
 
     if (isVisible) {
-      return /*#__PURE__*/_react["default"].createElement(LoadableComponent, props);
+      return _react["default"].createElement(LoadableComponent, props);
     }
 
     if (LoadingComponent || props.fallback) {
-      return /*#__PURE__*/_react["default"].createElement("div", _extends({
+      return _react["default"].createElement("div", _extends({
         style: {
           display: "inline-block",
           minHeight: "1px",
@@ -87,12 +87,12 @@ function createLoadableVisibilityComponent(args, _ref) {
         }
       }, props, {
         ref: visibilityElementRef
-      }), LoadingComponent ? /*#__PURE__*/_react["default"].createElement(LoadingComponent, _extends({
+      }), LoadingComponent ? _react["default"].createElement(LoadingComponent, _extends({
         isLoading: true
       }, props)) : props.fallback);
     }
 
-    return /*#__PURE__*/_react["default"].createElement("div", _extends({
+    return _react["default"].createElement("div", _extends({
       style: {
         display: "inline-block",
         minHeight: "1px",
