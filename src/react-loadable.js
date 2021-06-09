@@ -8,6 +8,8 @@ function LoadableVisibility (opts) {
     return createLoadableVisibilityComponent([opts], {
       Loadable,
       preloadFunc: 'preload',
+      /* Preload helps in synchronously loading a component and returns a promise */
+      loadFunc: 'preload',
       LoadingComponent: opts.loading,
     })
   } else {
@@ -20,6 +22,7 @@ function LoadableVisibilityMap (opts) {
     return createLoadableVisibilityComponent([opts], {
       Loadable: Loadable.Map,
       preloadFunc: 'preload',
+      loadFunc: 'preload',
       LoadingComponent: opts.loading,
     })
   } else {

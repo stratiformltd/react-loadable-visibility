@@ -126,6 +126,34 @@ describe("Loadable", () => {
     expect(queryByTestId("loaded-component")).toBeTruthy();
   });
 
+  test("load calls loadable load", () => {
+    // Mock @loadable/component to get a stable `load` function
+    jest.doMock("@loadable/component");
+
+    const loadable = require("@loadable/component");
+    const loadableVisiblity = require("../../loadable-components"); // Require our tested module with the above mock applied
+
+    loadableVisiblity(loader).load();
+
+    expect(loadable().load).toHaveBeenCalled();
+  });
+
+  test("load will cause the loadable component to be displayed", async () => {
+    const Loader = loadableVisiblity(loader);
+    let returnedValue;
+
+    const { queryByTestId } = render(<Loader {...props} />);
+    expect(queryByTestId("loaded-component")).toBeNull();
+
+    act(() => {
+      returnedValue = Loader.load()
+      expect(returnedValue).toBeInstanceOf(Promise);
+    });
+    returnedValue.then(() => {
+      expect(queryByTestId("loaded-component")).toBeTruthy();
+    })
+  });
+
   test("it displays the loadable component when it becomes visible", async () => {
     const Loader = loadableVisiblity(loader);
 
