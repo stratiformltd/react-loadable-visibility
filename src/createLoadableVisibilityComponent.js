@@ -1,13 +1,17 @@
 import React, { useEffect, useState, useRef } from "react";
 import { IntersectionObserver } from "./capacities";
 
-let intersectionObserver;
 const trackedElements = new Map();
 
-if (IntersectionObserver) {
-  intersectionObserver = new window.IntersectionObserver(
-    (entries, observer) => {
-      entries.forEach(entry => {
+let options = {
+  threshold: 0,
+  rootMargin: "0px 0px 500px 0px",
+};
+
+function createIntersectionObserver(intersectionObserverOptions) {
+  if (IntersectionObserver) {
+    return new window.IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
         const visibilityHandler = trackedElements.get(entry.target);
 
         if (
@@ -17,14 +21,23 @@ if (IntersectionObserver) {
           visibilityHandler();
         }
       });
-    }
-  );
+    }, intersectionObserverOptions);
+  }
 }
+
+// create an intersection observer with the default options
+let intersectionObserver = createIntersectionObserver(options);
 
 function createLoadableVisibilityComponent(
   args,
-  { Loadable, preloadFunc, LoadingComponent }
+  { Loadable, preloadFunc, LoadingComponent, intersectionObserverOptions }
 ) {
+  // if options have been passed to the intersection observer a new instance of intersection observer is created using these passed options else the same instance of intersectin observer will observe all the target elements.
+  if (typeof intersectionObserverOptions === "object") {
+    intersectionObserver = createIntersectionObserver(
+      intersectionObserverOptions
+    );
+  }
   let preloaded = false;
   const visibilityHandlers = [];
 
