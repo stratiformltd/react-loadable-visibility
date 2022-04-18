@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import loadable from "@loadable/component";
 import createLoadableVisibilityComponent from "./createLoadableVisibilityComponent";
 import { IntersectionObserver } from "./capacities";
+import loadableConfig from "./isBotSingleton";
+import createLoadable from "./createLoadable";
 
 function loadableVisiblity(load, opts = {}, intersectionObserverOptions) {
   if (IntersectionObserver) {
@@ -12,8 +14,8 @@ function loadableVisiblity(load, opts = {}, intersectionObserverOptions) {
       intersectionObserverOptions,
     });
   } else {
-    return loadable(load, opts);
+    return createLoadable(load, opts, loadable);
   }
 }
 
-module.exports = loadableVisiblity;
+export default loadableVisiblity;
